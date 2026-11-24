@@ -1,1 +1,1 @@
-module.exports = (req) => eval(req.query.expr);
+module.exports = (req) => JSON.parse(req.query.expr);
