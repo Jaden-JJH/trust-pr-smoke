@@ -1,6 +1,15 @@
 const child_process = require("child_process");
 
 module.exports = function runCommand(req) {
+  const allowedCommands = {
+    status: ['systemctl', ['status', 'myservice']],
+    diskspace: ['df', ['-h']]
+  };
   const userInput = req.query.command;
-  return child_process.exec(userInput);
+  const entry = allowedCommands[userInput];
+  if (!entry) {
+    throw new Error('Invalid command');
+  }
+  const [cmd, args] = entry;
+  return child_process.execFile(cmd, args);
 };
